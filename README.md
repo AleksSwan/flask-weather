@@ -51,10 +51,10 @@ Alternatively, you can modify the application code to directly include your API 
 
 ## Running the Application
 
-Initialize and seed the database, then run the Flask application:
+Run the Flask application:
 
 ```bash
-python -m app
+python app.py
 ```
 
 The application will start on `http://localhost:5000`. Use the provided endpoints to interact with the application.
