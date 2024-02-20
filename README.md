@@ -22,8 +22,8 @@ This application is an asynchronous Flask web service designed to update user ba
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/yourrepository/async-flask-weather-app.git
-cd async-flask-weather-app
+git clone https://github.com/AleksSwan/flask-weather.git
+cd flask-weather
 ```
 
 Create a virtual environment and activate it:
