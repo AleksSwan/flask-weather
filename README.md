@@ -1,43 +1,36 @@
-# Async Flask Weather Application
+# Asynchronous Flask application
 
-This application is an asynchronous Flask web service designed to update user balances based on temperature data fetched from an external weather API. It leverages `asyncio`, `SQLAlchemy` (for async database operations), and `aiohttp` to perform asynchronous HTTP requests.
+This application demonstrates an asynchronous Flask web service for managing user records and dynamically updating user balances based on real-time weather data. It leverages `asyncio` for asynchronous operations, `SQLAlchemy` for async database interactions, and `aiohttp` for fetching weather information.
 
 ## Features
 
-- Asynchronous database operations with SQLAlchemy.
-- Asynchronous external API calls to fetch weather data.
-- Update user balances based on real-time temperature data.
-- Caching mechanism for temperature data to reduce API calls.
-
-## Prerequisites
-
-- Python 3.7+
-- aiohttp
-- Flask 2.0+
-- SQLAlchemy 1.4+ with async support
-- SQLite (or other SQLAlchemy-supported databases with async support)
+- **Asynchronous Database Operations**: Utilizes SQLAlchemy with async/await syntax for non-blocking database interactions.
+- **Dynamic Balance Updates**: Offers an endpoint to update user balances by either increasing or decreasing based on the current temperature of a specified city.
+- **Weather Data Fetching**: Uses `aiohttp` to asynchronously fetch real-time weather data from an external API.
+- **Caching mechanism**: Reduce the number of external API calls made to fetch current weather information.
+- **User Management**: Supports adding, updating, deleting, and fetching user details asynchronously.
 
 ## Installation
 
-Clone the repository to your local machine:
+Ensure you have Python 3.7+ installed, then follow these steps:
 
-```bash
-git clone https://github.com/AleksSwan/flask-weather.git
-cd flask-weather
-```
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/AleksSwan/flask-weather.git
+   cd flask-weather
+   ```
 
-Create a virtual environment and activate it:
+2. Create a virtual environment and activate it:
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-```
+    ```sh
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
-Install the required packages:
-
-```bash
-pip install -r requirements.txt
-```
+3. Install required packages:
+   ```sh
+   pip install -r requirements.txt
+   ```
 
 ## Configuration
 
@@ -47,33 +40,47 @@ Set the necessary environment variables:
 export API_KEY='your_openweathermap_api_key_here'
 ```
 
-Alternatively, you can modify the application code to directly include your API key or use a configuration file.
+## Usage
 
-## Running the Application
+**SingleApp** Start the application:
 
-Run the Flask application:
-
-```bash
+```sh
 python app.py
 ```
 
-The application will start on `http://localhost:5000`. Use the provided endpoints to interact with the application.
+The application will run on `http://localhost:5000` by default.
 
-## API Endpoints
+**MultiApp** Execute the following command in the project root:
 
-- `GET /update-balance/<operation>/<user_id>/<city>`: Update the user's balance based on the temperature in the specified city. `operation` can be `increase` or `decrease`.
+```sh
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker app:asgi_app --bind 0.0.0.0:5000
+```
 
-## Development and Contribution
+This command runs the application with 4 worker processes, leveraging Uvicorn for async capabilities. Adjust the number of workers based on your server's specifications.
 
-Contributions to this project are welcome! Please follow the standard fork, branch, and pull request workflow. Don't forget to update tests as necessary.
+## Endpoints
 
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -am 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a pull request.
+### Update a user's balance based on the temperature in the specified city. `operation` can be `increase` or `decrease`.
+
+- **POST /update-balance**:
+  - Body: `{"user_id": 1, "operation": "increase", "city": "London"}`
+- **GET /update-balance/\<operation\>/\<user_id\>/\<city\>**
+
+
+### User managmment
+
+- **GET /users**: List all users.
+- **POST /users/**: Add a new user.
+  - Body: `{"username": "john_doe", "balance": 1000}`
+- **PUT /users/<user_id>**: Update an existing user.
+  - Body: `{"username": "john_doe_updated", "balance": 1500}`
+- **DELETE /users/<user_id>**: Delete a user by ID.
+- **GET /users/<user_id>**: Fetch details of a specific user.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit pull requests with any enhancements. Ensure you follow the project's code style and add unit tests for any new features.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
+Distributed under the MIT License. See `LICENSE` file for more information.
